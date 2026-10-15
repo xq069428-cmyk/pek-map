@@ -27,7 +27,7 @@ const places = [
  {id:"place-1792063309448",name:"博雅塔",coords:[39.992620013346155,116.30579173564912],photo:"photos/boya-tower.jpg",description:"彭米儿在10月15日标记了博雅塔✌️"}
 ];
 const map=L.map('map').setView([39.9917,116.3025],16);
-L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a>'}).addTo(map);
+L.tileLayer('https://tile.openstreetmap.bzh/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a>'}).addTo(map);
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 places.forEach(p=>{const photo=`<img class="popup-photo" src="${esc(p.photo)}" alt="${esc(p.name)}照片" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><div class="photo-note" style="display:none">照片暂时无法显示。</div>`;L.marker(p.coords).addTo(map).bindPopup(`<div><p class="popup-title">${esc(p.name)}</p><p class="popup-desc">${esc(p.description)}</p>${photo}</div>`)});
 const bounds=L.latLngBounds(places.map(p=>p.coords));map.fitBounds(bounds.pad(0.22));
