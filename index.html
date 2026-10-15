@@ -1,35 +1,34 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>北大记忆地图 · PKU Memory Map</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
 :root{--ink:#24302d;--muted:#68736e;--paper:#f7f6f1;--accent:#315c4b;--line:#d9e0d8}
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB",sans-serif;color:var(--ink);background:var(--paper)}
-header{padding:23px 24px 16px;display:flex;align-items:flex-end;justify-content:space-between;gap:14px;flex-wrap:wrap}.eyebrow{margin:0 0 6px;text-transform:uppercase;letter-spacing:.16em;font-size:11px;color:var(--muted)}
-h1{margin:0;font-size:clamp(25px,4vw,38px);font-weight:650;letter-spacing:-.04em}.intro{margin:8px 0 0;color:var(--muted);font-size:14px;line-height:1.7}.tag{border:1px solid var(--line);border-radius:999px;padding:8px 12px;color:var(--accent);font-size:12px;white-space:nowrap}
-#map{height:calc(100vh - 165px);min-height:460px;margin:0 16px 12px;border-radius:16px;overflow:hidden;border:1px solid #dfe3dc}footer{padding:0 24px 18px;color:var(--muted);font-size:11px;line-height:1.7}
-.leaflet-popup-content-wrapper{border-radius:14px}.leaflet-popup-content{margin:14px;width:245px!important}.popup-title{font-size:16px;font-weight:650;margin:0 0 6px}.popup-desc{color:#65716e;font-size:12px;line-height:1.65;margin:0 0 10px;white-space:pre-wrap}.popup-photo{display:block;width:100%;max-height:210px;object-fit:cover;border-radius:9px;background:#edf0ea}.photo-note{color:#7a837d;font-size:11px;line-height:1.5;margin-top:7px}
-@media(max-width:600px){header{padding:18px 15px 12px;align-items:flex-start;flex-direction:column}#map{height:68vh;min-height:410px;margin:0 8px 10px;border-radius:12px}footer{padding:0 15px 14px}}
-</style>
-</head>
-<body>
+header{padding:23px 24px 16px;display:flex;align-items:flex-end;justify-content:space-between;gap:14px;flex-wrap:wrap}.eyebrow{margin:0 0 6px;text-transform:uppercase;letter-spacing:.16em;font-size:11px;color:var(--muted)}h1{margin:0;font-size:clamp(25px,4vw,38px);font-weight:650;letter-spacing:-.04em}.intro{margin:8px 0 0;color:var(--muted);font-size:14px;line-height:1.7}.tag{border:1px solid var(--line);border-radius:999px;padding:8px 12px;color:var(--accent);font-size:12px;white-space:nowrap}
+#map{position:relative;height:calc(100vh - 190px);min-height:430px;margin:0 16px 12px;border-radius:16px;overflow:hidden;border:1px solid #dfe3dc;background:#e9f0eb;touch-action:none;cursor:grab}#map.dragging{cursor:grabbing}#world{position:absolute;left:0;top:0;width:100%;transform-origin:0 0;will-change:transform}#campus{display:block;width:100%;height:auto;user-select:none;-webkit-user-drag:none;pointer-events:none}.pin{position:absolute;transform:translate(-50%,-100%);border:2px solid white;border-radius:50% 50% 50% 0;width:34px;height:34px;background:#315c4b;color:white;box-shadow:0 2px 8px #0004;rotate:-45deg;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0}.pin span{rotate:45deg;font-size:15px;font-weight:700}.pin:focus-visible{outline:3px solid #d5a742;outline-offset:3px}.controls{position:absolute;right:12px;top:12px;display:flex;flex-direction:column;gap:6px;z-index:5}.controls button,.reset{border:1px solid #d6ddd5;background:#fffF;color:#24302d;border-radius:9px;width:40px;height:40px;font-size:22px;box-shadow:0 2px 8px #0001;cursor:pointer}.hint{position:absolute;left:12px;bottom:12px;background:#fffffff0;border:1px solid #dfe3dc;border-radius:999px;padding:7px 11px;font-size:11px;color:#5e6b64;z-index:3}.popup{position:absolute;z-index:10;left:50%;top:50%;transform:translate(-50%,-50%);width:min(320px,calc(100% - 28px));max-height:calc(100% - 28px);overflow:auto;background:#fff;border:1px solid #e2e7e0;border-radius:16px;box-shadow:0 12px 40px #17251e35;padding:16px;display:none}.popup.open{display:block}.close{float:right;border:0;background:#eef1ed;border-radius:50%;width:28px;height:28px;font-size:18px;cursor:pointer}.popup-title{font-size:17px;font-weight:700;margin:3px 36px 7px 0}.popup-desc{color:#65716e;font-size:12px;line-height:1.65;margin:0 0 11px;white-space:pre-wrap}.popup-photo{display:block;width:100%;max-height:220px;object-fit:cover;border-radius:10px;background:#edf0ea}.photo-note{color:#7a837d;font-size:11px;line-height:1.5;margin-top:7px}footer{padding:0 24px 18px;color:var(--muted);font-size:11px;line-height:1.7}
+@media(max-width:600px){header{padding:18px 15px 12px;align-items:flex-start;flex-direction:column}#map{height:68vh;min-height:390px;margin:0 8px 10px;border-radius:12px}footer{padding:0 15px 14px}}
+</style></head><body>
 <header><div><p class="eyebrow">A personal campus atlas</p><h1>北大记忆地图</h1><p class="intro">每一个标记，都是一段校园记忆。点击地图上的地点，查看照片与记录。</p></div><span class="tag">只读浏览 · Read-only</span></header>
-<div id="map" aria-label="北京大学记忆地图"></div>
-<footer>地图底图 © OpenStreetMap contributors。此页面仅供浏览，不能添加、编辑或删除地点。照片与文字由地图创建者提供。</footer>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<div id="map" aria-label="北京大学校园记忆地图，可拖动和缩放"><div id="world"><img id="campus" src="pku-campus-map.jpg" alt="北京大学校园地图">
+<button class="pin" style="left:32.1%;top:43.0%" data-place="0" aria-label="西侧门（内侧）"><span>1</span></button>
+<button class="pin" style="left:37.1%;top:44.5%" data-place="1" aria-label="国际关系学院"><span>2</span></button>
+<button class="pin" style="left:60.2%;top:40.5%" data-place="2" aria-label="博雅塔"><span>3</span></button>
+</div><div class="controls"><button id="zoomIn" aria-label="放大">+</button><button id="zoomOut" aria-label="缩小">−</button><button id="reset" aria-label="重置视图" style="font-size:17px">⌂</button></div><div class="hint">拖动浏览 · 滚轮或按钮缩放 · 点击编号查看记忆</div>
+<div class="popup" id="popup" role="dialog" aria-modal="true"><button class="close" id="close" aria-label="关闭">×</button><p class="popup-title" id="popupTitle"></p><p class="popup-desc" id="popupDesc"></p><img class="popup-photo" id="popupPhoto" alt="地点照片"><div class="photo-note" id="photoNote" style="display:none">照片暂时无法显示，请检查 photos 文件夹。</div></div></div>
+<footer>校园地图图片由页面创建者提供。此页面仅供浏览，不依赖在线地图底图或地图 API 密钥；地点标记为根据底图初步放置，可继续微调。照片与文字由地图创建者提供。</footer>
 <script>
-const places = [
- {id:"place-1792062994630",name:"西侧门（内侧）",coords:[39.99167063677312,116.29864096641542],photo:"photos/xicemen.jpg",description:"彭米儿在10月15日标记了西侧门（内侧）✌️"},
- {id:"place-1792063238016",name:"国际关系学院",coords:[39.99057739891809,116.30045950412752],photo:"photos/guojiguanxixueyuan.jpg",description:"彭米儿在10月15日标记了国际关系学院✌️"},
- {id:"place-1792063309448",name:"博雅塔",coords:[39.992620013346155,116.30579173564912],photo:"photos/boya-tower.jpg",description:"彭米儿在10月15日标记了博雅塔✌️"}
-];
-const map=L.map('map').setView([39.9917,116.3025],16);
-L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a>'}).addTo(map);
-function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-places.forEach(p=>{const photo=`<img class="popup-photo" src="${esc(p.photo)}" alt="${esc(p.name)}照片" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><div class="photo-note" style="display:none">照片暂时无法显示。</div>`;L.marker(p.coords).addTo(map).bindPopup(`<div><p class="popup-title">${esc(p.name)}</p><p class="popup-desc">${esc(p.description)}</p>${photo}</div>`)});
-const bounds=L.latLngBounds(places.map(p=>p.coords));map.fitBounds(bounds.pad(0.22));
-</script>
-</body></html>
+const places=[
+{name:'西侧门（内侧）',photo:'photos/xicemen.jpg',description:'彭米儿在10月15日标记了西侧门（内侧）✌️'},
+{name:'国际关系学院',photo:'photos/guojiguanxixueyuan.jpg',description:'彭米儿在10月15日标记了国际关系学院✌️'},
+{name:'博雅塔',photo:'photos/boya-tower.jpg',description:'彭米儿在10月15日标记了博雅塔✌️'}];
+const map=document.getElementById('map'),world=document.getElementById('world'),popup=document.getElementById('popup');let scale=1,tx=0,ty=0,drag=false,startX=0,startY=0,originX=0,originY=0;
+function render(){world.style.transform=`translate(${tx}px,${ty}px) scale(${scale})`}
+function zoom(f,cx=map.clientWidth/2,cy=map.clientHeight/2){const old=scale;scale=Math.max(1,Math.min(4,scale*f));const r=scale/old;tx=cx-(cx-tx)*r;ty=cy-(cy-ty)*r;render()}
+document.getElementById('zoomIn').onclick=()=>zoom(1.25);document.getElementById('zoomOut').onclick=()=>zoom(.8);document.getElementById('reset').onclick=()=>{scale=1;tx=0;ty=0;render();popup.classList.remove('open')};
+map.addEventListener('pointerdown',e=>{if(e.target.closest('button')||e.target.closest('.popup'))return;drag=true;map.classList.add('dragging');startX=e.clientX;startY=e.clientY;originX=tx;originY=ty;map.setPointerCapture(e.pointerId)});
+map.addEventListener('pointermove',e=>{if(!drag)return;tx=originX+e.clientX-startX;ty=originY+e.clientY-startY;render()});map.addEventListener('pointerup',()=>{drag=false;map.classList.remove('dragging')});map.addEventListener('pointercancel',()=>{drag=false;map.classList.remove('dragging')});
+map.addEventListener('wheel',e=>{e.preventDefault();const r=map.getBoundingClientRect();zoom(e.deltaY<0?1.12:.89,e.clientX-r.left,e.clientY-r.top)},{passive:false});
+document.querySelectorAll('.pin').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();const p=places[+b.dataset.place];document.getElementById('popupTitle').textContent=p.name;document.getElementById('popupDesc').textContent=p.description;const img=document.getElementById('popupPhoto'),note=document.getElementById('photoNote');note.style.display='none';img.style.display='block';img.src=p.photo;img.alt=p.name+'照片';img.onerror=()=>{img.style.display='none';note.style.display='block'};popup.classList.add('open')}));document.getElementById('close').onclick=()=>popup.classList.remove('open');map.addEventListener('click',e=>{if(e.target===map)popup.classList.remove('open')});
+</script></body></html>
